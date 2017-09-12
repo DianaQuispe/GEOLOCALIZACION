@@ -1,10 +1,11 @@
-const app = {
+ 'use strict';
+ const app = {
     map: undefined,
     markerOrigen: undefined,
     detailOrigen: undefined,
 
     init: function () {
-        app.map = new google.maps.Map(document.getElementById("map"), {
+        app.map = new google.maps.Map(document.getElementById('map'), {
             zoom: 5,
             center: {
                 lat: -9.1191427,
@@ -15,29 +16,29 @@ const app = {
             streetViewControl: false
         });
 
-        var inputOrigen = document.getElementById('origen');
-        var autocompleteOrigen = new google.maps.places.Autocomplete(inputOrigen);
+        let inputOrigen = document.getElementById('origen');
+        let autocompleteOrigen = new google.maps.places.Autocomplete(inputOrigen);
         autocompleteOrigen.bindTo('bounds', app.map);
         app.detailOrigen = new google.maps.InfoWindow();
         app.markerOrigen = app.crearMarcador(app.map);
 
         app.crearListener(autocompleteOrigen, app.detailOrigen, app.markerOrigen);
 
-        var inputDestino = document.getElementById('destino');
-        var autocompleteDestino = new google.maps.places.Autocomplete(inputDestino);
+        let inputDestino = document.getElementById('destino');
+        let autocompleteDestino = new google.maps.places.Autocomplete(inputDestino);
         autocompleteDestino.bindTo('bounds', app.map);
-        var detailDestination = new google.maps.InfoWindow();
-        var markerDestination = app.crearMarcador(app.map);
+        let detailDestination = new google.maps.InfoWindow();
+        let markerDestination = app.crearMarcador(app.map);
 
         app.crearListener(autocompleteDestino, detailDestination, markerDestination);
 
         /* Mi ubicación actual */
-        document.getElementById("encuentrame").addEventListener("click", app.buscarMiUbicacion);
+        document.getElementById('encuentrame').addEventListener('click', app.buscarMiUbicacion);
         /* Ruta */
-        var directionsService = new google.maps.DirectionsService;
-        var directionsDisplay = new google.maps.DirectionsRenderer;
+        let directionsService = new google.maps.DirectionsService;
+        let directionsDisplay = new google.maps.DirectionsRenderer;
 
-        document.getElementById("ruta").addEventListener("click", function () {
+        document.getElementById('ruta').addEventListener('click', function () {
             app.dibujarRuta(directionsService, directionsDisplay)
         });
 
@@ -48,7 +49,7 @@ const app = {
         autocomplete.addListener('place_changed', function () {
             detalleUbicacion.close();
             marker.setVisible(false);
-            var place = autocomplete.getPlace();
+            let place = autocomplete.getPlace();
             app.marcarUbicacion(place, detalleUbicacion, marker);
         });
     },
@@ -60,11 +61,11 @@ const app = {
     },
 
     funcionError : function (error) {
-        alert("Tenemos un problema para encontrar tu ubicación");
+        alert('Tenemos un problema para encontrar tu ubicación');
     },
 
     marcarUbicacionAutomatica : function (posicion) {
-        var latitud, longitud;
+        let latitud, longitud;
         latitud = posicion.coords.latitude;
         longitud = posicion.coords.longitude;
 
@@ -86,7 +87,7 @@ const app = {
     marcarUbicacion : function (place, detalleUbicacion, marker) {
         if (!place.geometry) {
             // Error si no encuentra el lugar indicado
-            window.alert("No encontramos el lugar que indicaste: '" + place.name + "'");
+            window.alert('No encontramos el lugar que indicaste: '  + place.name + '');
             return;
         }
         // If the place has a geometry, then present it on a map.
@@ -96,11 +97,11 @@ const app = {
             app.map.setCenter(place.geometry.location);
             app.map.setZoom(17);
         }
-        
+
         marker.setPosition(place.geometry.location);
         marker.setVisible(true);
 
-        var address = '';
+        let address = '';
         if (place.address_components) {
             address = [
                 (place.address_components[0] && place.address_components[0].short_name || ''),
@@ -114,7 +115,7 @@ const app = {
     },
 
     crearMarcador: function(map) {
-        var icono = {
+        let icono = {
             url: 'http://icons.iconarchive.com/icons/sonya/swarm/128/Bike-icon.png',
             size: new google.maps.Size(71, 71),
             origin: new google.maps.Point(0, 0),
@@ -122,7 +123,7 @@ const app = {
             scaledSize: new google.maps.Size(35, 35)
         };
 
-        var marker = new google.maps.Marker({
+        let marker = new google.maps.Marker({
             map: map,
             animation: google.maps.Animation.DROP,
             icon: icono,
@@ -133,17 +134,17 @@ const app = {
     },
 
     dibujarRuta: function(directionsService, directionsDisplay) {
-        var origin = document.getElementById("origen").value;
-        var destination = document.getElementById('destino').value;
+        let origin = document.getElementById('origen').value;
+        let destination = document.getElementById('destino').value;
 
-        if (destination != "" && destination != "") {
+        if (destination != ' && destination != ') {
             directionsService.route({
                     origin: origin,
                     destination: destination,
-                    travelMode: "DRIVING"
+                    travelMode: 'DRIVING'
                 },
                 function (response, status) {
-                    if (status === "OK") {
+                    if (status === 'OK') {
                         directionsDisplay.setDirections(response);
                     } else {
                         app.funcionErrorRuta();
@@ -153,7 +154,7 @@ const app = {
     },
 
     funcionErrorRuta: function() {
-        alert("No ingresaste un origen y un destino validos");
+        alert('No ingresaste un origen y un destino validos');
     }
 }
 
